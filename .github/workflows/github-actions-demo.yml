@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
       - name: build image
         run: |
-          docker build ./gitaction/ -t amitdrogo/python-docker:latest
+          docker build ./ -t amitdrogo/python-docker:latest
       - name: push image to docker hub
         run: |
           docker login -u amitdrogo -p ${{ secrets.DOCKER_HUB_TOKEN }}
