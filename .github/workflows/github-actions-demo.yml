@@ -2,7 +2,7 @@ name: Build
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  Build:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -16,3 +16,18 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+  deploy:
+      needs: Build
+      name: deploy image
+      runs-on: ubuntu-latest
+      steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build image
+        run: |
+          docker build ./gitaction/ -t amitdrogo/python-docker:latest
+      - name: push image to docker hub
+        run: |
+          docker login -u amitdrogo -p ${{ secrets.DOCKER_HUB_TOKEN }}
+          docker push amitdrogo/python-docker:latest
+
